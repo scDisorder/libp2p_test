@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -56,8 +55,10 @@ func main() {
 	var dht *kaddht.IpfsDHT
 	newDHT := func(h host.Host) (routing.PeerRouting, error) {
 		var err error
-		dht, err = kaddht.New(ctx, h)
-		return dht, err
+		if dht, err = kaddht.New(ctx, h); err != nil {
+			log.Fatalf("Unable to create dht: %s", err)
+		}
+		return dht, nil
 	}
 	routing := libp2p.Routing(newDHT)
 
@@ -70,26 +71,26 @@ func main() {
 		routing,
 	)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	ps, err := pubsub.NewGossipSub(ctx, host)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	topic, err := ps.Join(pubsubTopic)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	defer topic.Close()
 	sub, err := topic.Subscribe()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	go pubsubHandler(ctx, sub)
 
 	for _, addr := range host.Addrs() {
-		fmt.Println("Listening on", addr)
+		log.Println("Listening on", addr)
 	}
 
 	targetAddr, err := multiaddr.NewMultiaddr("/ip4/127.0.0.1/tcp/63785/p2p/QmWjz6xb8v9K4KnYEwP5Yk75k5mMBCehzWFLCvvQpYxF3d")
@@ -99,22 +100,19 @@ func main() {
 
 	targetInfo, err := peer.AddrInfoFromP2pAddr(targetAddr)
 	if err != nil {
-		//log.Printf("Unable to get target info: %s", err)
-		//err = nil
 		log.Fatalf("Unable to get target info: %s", err)
 	}
 
-	fmt.Println("Connected to", targetInfo.ID)
+	log.Println("Connected to", targetInfo.ID)
 
 	mdns, err := discovery.NewMdnsService(ctx, host, 5*time.Second, "")
 	if err != nil {
-		log.Fatalf("Unable to create new mdns service")
+		log.Fatalf("Unable to create new mdns service: %s", err)
 	}
 	mdns.RegisterNotifee(&mdnsNotifee{h: host, ctx: ctx})
 
-	err = dht.Bootstrap(ctx)
-	if err != nil {
-		panic(err)
+	if err := dht.Bootstrap(ctx); err != nil {
+		log.Fatalf("Failed to bootstrap dht: %s", err)
 	}
 
 	donec := make(chan struct{}, 1)

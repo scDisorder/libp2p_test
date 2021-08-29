@@ -3,11 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
-	"os"
-
 	"github.com/gogo/protobuf/proto"
 	peer "github.com/libp2p/go-libp2p-core/peer"
 	pubsub "github.com/libp2p/go-libp2p-pubsub"
+	"os"
 )
 
 var handles = map[string]string{}
