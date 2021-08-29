@@ -17,5 +17,5 @@ require (
 	github.com/libp2p/go-tcp-transport v0.2.7
 	github.com/libp2p/go-ws-transport v0.4.0
 	github.com/multiformats/go-multiaddr v0.3.3
-	google.golang.org/protobuf v1.26.0
+	google.golang.org/protobuf v1.27.1
 )
