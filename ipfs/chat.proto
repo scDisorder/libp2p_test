@@ -19,5 +19,5 @@ message SendMessage {
 }
 
 message UpdatePeer {
-  optional bytes userHandle = 1;
+  bytes userHandle = 1;
 }

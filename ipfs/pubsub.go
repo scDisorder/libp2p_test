@@ -2,10 +2,11 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
-	"github.com/gogo/protobuf/proto"
-	peer "github.com/libp2p/go-libp2p-core/peer"
-	pubsub "github.com/libp2p/go-libp2p-pubsub"
+	"github.com/libp2p/go-libp2p-core/peer"
+	"github.com/libp2p/go-libp2p-pubsub"
+	"log"
 	"os"
 )
 
@@ -39,10 +40,9 @@ func pubsubHandler(ctx context.Context, sub *pubsub.Subscription) {
 			continue
 		}
 
-		req := &Request{}
-		err = proto.Unmarshal(msg.Data, req)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, err)
+		var req Request
+		if err := json.Unmarshal(msg.Data, &req); err != nil {
+			log.Printf("Unable to unmarshal request: %s", err)
 			continue
 		}
 

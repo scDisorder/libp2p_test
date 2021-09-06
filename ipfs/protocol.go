@@ -4,11 +4,12 @@ import (
 	"bufio"
 	"context"
 	"crypto/rand"
+	"encoding/json"
 	"fmt"
-	"github.com/gogo/protobuf/proto"
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/libp2p/go-libp2p-pubsub"
+	"log"
 	"os"
 	"strings"
 	"time"
@@ -34,7 +35,7 @@ func sendMessage(ctx context.Context, topic *pubsub.Topic, msg string) {
 			Created: now,
 		},
 	}
-	msgBytes, err := proto.Marshal(req)
+	msgBytes, err := json.Marshal(req)
 	if err != nil {
 		return
 	}
@@ -54,14 +55,14 @@ func updatePeer(ctx context.Context, topic *pubsub.Topic, id peer.ID, handle str
 			UserHandle: []byte(handle),
 		},
 	}
-	reqBytes, err := proto.Marshal(req)
+	reqBytes, err := json.Marshal(req)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		log.Printf("Failed to marshal payload: %s", err)
 		return
 	}
-	err = topic.Publish(ctx, reqBytes)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
+
+	if err := topic.Publish(ctx, reqBytes); err != nil {
+		log.Printf("Failed to publish: %s", err)
 		return
 	}
 
