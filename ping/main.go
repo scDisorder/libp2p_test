@@ -27,7 +27,6 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println("-1st checkpoint")
 
 	// configure our own ping protocol
 	pingService := &ping.PingService{Host: node}
