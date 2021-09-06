@@ -20,6 +20,7 @@ func FindFreePort(t *testing.T, host string, maxAttempts int) (int, error) {
 			t.Logf("unable to resolve tcp addr: %v", err)
 			continue
 		}
+
 		l, err := net.ListenTCP("tcp", addr)
 		if err != nil {
 			l.Close()
