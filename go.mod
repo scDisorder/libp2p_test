@@ -18,7 +18,7 @@ require (
 	github.com/koron/go-ssdp v0.0.2 // indirect
 	github.com/libp2p/go-libp2p-asn-util v0.0.0-20210818120414-1f382a4aa43a // indirect
 	github.com/libp2p/go-libp2p-autonat v0.5.0 // indirect
-	github.com/libp2p/go-libp2p-core v0.9.0
+	github.com/libp2p/go-libp2p-core v0.10.0
 	github.com/libp2p/go-libp2p-kad-dht v0.13.1
 	github.com/libp2p/go-libp2p-mplex v0.4.1
 	github.com/libp2p/go-libp2p-noise v0.2.2 // indirect
