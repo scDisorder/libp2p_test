@@ -28,7 +28,7 @@ require (
 	github.com/libp2p/go-tcp-transport v0.2.7
 	github.com/libp2p/go-ws-transport v0.5.0
 	github.com/miekg/dns v1.1.43 // indirect
-	github.com/multiformats/go-multiaddr v0.4.0
+	github.com/multiformats/go-multiaddr v0.4.1
 	github.com/multiformats/go-multicodec v0.3.0 // indirect
 	github.com/multiformats/go-multihash v0.0.16 // indirect
 	github.com/prometheus/common v0.30.0 // indirect
